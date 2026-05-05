@@ -2,9 +2,9 @@ import { NextResponse } from 'next/server'
 import { updateFlag, swimLane } from '@/lib/store'
 import { createIssue } from '@/lib/jira'
 
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const { action, reason } = await request.json()
-  const { id } = params
 
   if (action === 'agree') {
     const flag = swimLane.find(f => f.id === id)
@@ -20,6 +20,5 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     updateFlag(id, { status: 'dismissed', dismissReason: reason })
   }
 
-  const updated = swimLane.find(f => f.id === id)
-  return NextResponse.json(updated)
+  return NextResponse.json(swimLane.find(f => f.id === id))
 }

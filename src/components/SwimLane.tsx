@@ -52,8 +52,8 @@ function FlagCard({ flag, idx, fading, onAgree, onDismiss }: any) {
             {REASONS.map(r=><option key={r.value} value={r.value} style={{ background:T.bg1 }}>{r.label}</option>)}
           </select>
           <div style={{ display:'flex', gap:8 }}>
-            <Button variant="secondary" size="compact" onClick={()=>setDismissing(false)} style={{ flex:1 }}>Cancel</Button>
-            <Button variant="tone" tone="red" size="compact" onClick={()=>onDismiss(flag.id,reason)} style={{ flex:1 }}>Confirm dismiss</Button>
+            <Button variant="secondary" size="compact" onClick={()=>{ setDismissing(false); setReason(REASONS[0].value) }} style={{ flex:1 }}>Cancel</Button>
+            <Button variant="tone" tone="red" size="compact" onClick={()=>{ onDismiss(flag.id, reason); setDismissing(false) }} style={{ flex:1 }}>Confirm dismiss</Button>
           </div>
         </div>
       )}
