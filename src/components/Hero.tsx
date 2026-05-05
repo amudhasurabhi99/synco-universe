@@ -29,7 +29,7 @@ export default function Hero({ stats }: { stats:{label:string,value:string,color
         border: `1px solid ${T.b1}`,
         borderRadius: 10,
         padding: '14px 20px',
-        marginBottom: 4,
+        marginTop: 4,
       }}>
         {[
           { metric: '7 hrs', label: 'saved per sprint', sub: 'per PM', color: T.orange },
