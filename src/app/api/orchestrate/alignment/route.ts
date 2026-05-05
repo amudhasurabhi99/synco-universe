@@ -79,8 +79,8 @@ ${ticketSummary || 'No tickets yet'}
 CODEBASE:
 ${codebase.slice(0, 1000)}
 
-Return ONLY raw JSON, absolutely no markdown, no backticks, no explanation before or after:
-{"overallScore":85,"prdVsJira":{"score":80,"aligned":["example"],"gaps":["example gap"],"summary":"summary here"},"jiraVsCode":{"score":75,"aligned":["example"],"gaps":["example gap"],"summary":"summary here"},"recommendations":["recommendation 1","recommendation 2"],"ticketUpdates":[{"key":"KAN-1","comment":"AI analysis comment here"}]}`
+IMPORTANT: You MUST include numeric scores 0-100. Return ONLY raw JSON no markdown no backticks:
+{"overallScore":72,"prdVsJira":{"score":65,"aligned":["ticket exists for reminders","ticket exists for dashboard"],"gaps":["missing deadline UI ticket","missing rate limiting ticket"],"summary":"Some tickets exist but many PRD requirements not covered"},"jiraVsCode":{"score":45,"aligned":["SplitCreator.ts exists"],"gaps":["no deadline implementation","no reminder engine"],"summary":"Code stubs exist but features not implemented"},"recommendations":["Create epic for Smart Split","Add acceptance criteria to tickets"],"ticketUpdates":[{"key":"KAN-1","comment":"PRD alignment check: deadline field required per section 2"}]}`
 
     const text = await callClaude(prompt)
     
