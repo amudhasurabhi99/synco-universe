@@ -1,5 +1,25 @@
 const NOTION_VERSION = '2022-06-28'
 
+export async function getAllPages(): Promise<{id: string, title: string}[]> {
+  const res = await fetch('https://api.notion.com/v1/search', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.NOTION_API_KEY}`,
+      'Notion-Version': NOTION_VERSION,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ filter: { value: 'page', property: 'object' }, page_size: 50 })
+  })
+  const data = await res.json()
+  if (!data.results) return []
+  return data.results.map((p: any) => {
+    const titleArr = p.properties?.title?.title ?? p.title ?? []
+    const title = titleArr.map((t: any) => t.plain_text).join('') || 'Untitled'
+    const id = p.id.replace(/-/g, '')
+    return { id, title }
+  })
+}
+
 export async function getPageText(pageId: string): Promise<string> {
   const res = await fetch(`https://api.notion.com/v1/blocks/${pageId}/children`, {
     headers: {
