@@ -12,6 +12,8 @@ export default function Home() {
     {name:'Jira',connected:false},{name:'Claude',connected:false},
   ])
   const [openFlags, setOpenFlags] = useState(0)
+  const [flagsResolved, setFlagsResolved] = useState(0)
+  const [scanStats, setScanStats] = useState({ ticketsCreated: 0 })
 
   const fetchStatus = async () => {
     try {
@@ -29,6 +31,7 @@ export default function Home() {
       const r = await fetch('/api/swimlane')
       const f = await r.json()
       setOpenFlags(f.filter((x:any)=>x.status==='open').length)
+      setFlagsResolved(f.filter((x:any)=>x.status!=='open').length)
     } catch {}
   }
 
@@ -41,28 +44,33 @@ export default function Home() {
     return()=>{ clearInterval(s); clearInterval(f) }
   },[])
 
-  const ImpactBar = () => (
-    <div style={{
-      display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10,
-      background: '#fff', border: `1px solid ${T.b1}`,
-      borderRadius: 10, padding: '14px 20px',
-    }}>
-      {[
-        { metric: '7 hrs', label: 'saved per sprint', sub: 'per PM', color: T.orange },
-        { metric: '35 hrs', label: 'saved per week', sub: '5-person team', color: T.green },
-        { metric: '$91k', label: 'annual saving', sub: 'at $50/hr loaded cost', color: T.blue },
-        { metric: '1 click', label: 'full alignment', sub: 'zero manual input', color: T.purple },
-      ].map(s => (
-        <div key={s.label} style={{ display:'flex', flexDirection:'column', gap:2 }}>
-          <div style={{ display:'flex', alignItems:'baseline', gap:6 }}>
-            <span className="mono" style={{ fontSize:20, fontWeight:600, color:s.color, letterSpacing:-0.5 }}>{s.metric}</span>
-            <span style={{ fontSize:11, color:T.t3 }}>{s.label}</span>
+  const ImpactBar = () => {
+    const ticketsCreated = scanStats.ticketsCreated
+    const hrsSaved = Math.round(ticketsCreated * 0.33)
+    const moneySaved = hrsSaved * 50
+    return (
+      <div style={{
+        display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10,
+        background: '#fff', border: `1px solid ${T.b1}`,
+        borderRadius: 10, padding: '14px 20px',
+      }}>
+        {[
+          { metric: ticketsCreated > 0 ? `${ticketsCreated}`, label: 'tickets auto-created', sub: 'this scan', color: T.orange },
+          { metric: hrsSaved > 0 ? `${hrsSaved} hrs` : '7 hrs', label: 'saved this sprint', sub: 'per PM estimate', color: T.green },
+          { metric: moneySaved > 0 ? `$${moneySaved.toLocaleString()}` : '$91k', label: 'annual saving', sub: 'at $50/hr loaded', color: T.blue },
+          { metric: `${flagsResolved}`, label: 'flags resolved', sub: 'via swim lane', color: T.purple },
+        ].map(s => (
+          <div key={s.label} style={{ display:'flex', flexDirection:'column', gap:2 }}>
+            <div style={{ display:'flex', alignItems:'baseline', gap:6 }}>
+              <span className="mono" style={{ fontSize:20, fontWeight:600, color:s.color, letterSpacing:-0.5 }}>{s.metric}</span>
+              <span style={{ fontSize:11, color:T.t3 }}>{s.label}</span>
+            </div>
+            <span style={{ fontSize:11, color:T.t4 }}>{s.sub}</span>
           </div>
-          <span style={{ fontSize:11, color:T.t4 }}>{s.sub}</span>
-        </div>
-      ))}
-    </div>
-  )
+        ))}
+      </div>
+    )
+  }
 
   return (
     <div style={{ background:T.bg0, minHeight:'100vh' }}>
@@ -91,7 +99,7 @@ export default function Home() {
 
       <main style={{ padding:'20px 32px 56px', display:'flex', flexDirection:'column', gap:16, maxWidth:1400, margin:'0 auto' }}>
         {/* Intelligence Scan — top */}
-        <IntelligenceScan/>
+        <IntelligenceScan onScanComplete={(stats:any)=>setScanStats({ticketsCreated:stats.created??0})}/>
 
         {/* Impact bar — below scan */}
         <ImpactBar/>

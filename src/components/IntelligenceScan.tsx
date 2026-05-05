@@ -73,7 +73,7 @@ function GapList({ title, items, tone }: any) {
   )
 }
 
-export default function IntelligenceScan() {
+export default function IntelligenceScan({ onScanComplete }: { onScanComplete?: (stats:any)=>void }) {
   const [running, setRunning] = useState(false)
   const [step, setStep] = useState(-1)
   const [showGaps, setShowGaps] = useState(false)
@@ -114,6 +114,7 @@ export default function IntelligenceScan() {
         prdPages: data.prdPages??[],
       })
       setLastScan(new Date().toLocaleString('en-US',{month:'short',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}))
+      if (onScanComplete) onScanComplete({ created: data.createdTickets?.length ?? 0 })
       setStep(STEPS.length)
       setTimeout(()=>{ setRunning(false); setStep(-1) }, 300)
     } catch(e:any) { clearInterval(iv); setError(e.message); setRunning(false); setStep(-1) }
