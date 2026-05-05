@@ -8,7 +8,7 @@ export function Dot({ size=8, color=T.green, glow=false, pulse=false, style={} }
 
 type Tone = 'blue'|'green'|'amber'|'red'|'purple'|'neutral'
 export function Badge({ tone='blue', children, style={} }: { tone?:Tone, children:React.ReactNode, style?:CSSProperties }) {
-  const m: Record<Tone,any> = {
+  const m: Record<Tone,{bg:string,fg:string,bd:string}> = {
     blue:{bg:T.blueBg,fg:T.blue,bd:'rgba(59,130,246,0.3)'},
     green:{bg:T.greenBg,fg:T.green,bd:'rgba(34,197,94,0.3)'},
     amber:{bg:T.amberBg,fg:T.amber,bd:'rgba(245,158,11,0.3)'},
@@ -22,16 +22,35 @@ export function Badge({ tone='blue', children, style={} }: { tone?:Tone, childre
 
 type BV = 'primary'|'primary-loading'|'secondary'|'tone'|'purple-grad'|'purple-grad-loading'
 type BS = 'compact'|'standard'|'prominent'|'hero'
+
 export function Button({ variant='secondary', size='standard', tone, children, onClick, disabled, style={} }: { variant?:BV, size?:BS, tone?:string, children:React.ReactNode, onClick?:()=>void, disabled?:boolean, style?:CSSProperties }) {
-  const h = {compact:32,standard:36,prominent:40,hero:44}[size]
+  const heights: Record<BS,number> = {compact:32,standard:36,prominent:40,hero:44}
+  const h = heights[size]
   const base: CSSProperties = { height:h, padding:size==='compact'?'0 12px':'0 20px', borderRadius:8, fontSize:size==='compact'?12:13, fontWeight:500, display:'inline-flex', alignItems:'center', justifyContent:'center', gap:8, transition:'all 200ms ease', cursor:disabled?'not-allowed':'pointer', opacity:disabled?0.5:1, border:'1px solid transparent', whiteSpace:'nowrap' }
+  
   let v: CSSProperties = {}
-  if (variant==='primary') v={background:'linear-gradient(135deg,#3b82f6,#8b5cf6)',color:'#fff',border:'1px solid rgba(255,255,255,0.08)'}
-  else if (variant==='primary-loading') v={backgroundImage:'linear-gradient(110deg,#3b82f6 0%,#8b5cf6 25%,#6366f1 50%,#8b5cf6 75%,#3b82f6 100%)',backgroundSize:'200% 100%',animation:'shimmerBg 2s linear infinite',color:'#fff',border:'1px solid rgba(255,255,255,0.08)'}
-  else if (variant==='secondary') v={background:'transparent',color:T.t2,border:`1px solid ${T.b2}`}
-  else if (variant==='tone') { const c={green:{bg:T.greenBg,fg:T.green,bd:'rgba(34,197,94,0.3)'},red:{bg:T.redBg,fg:T.red,bd:'rgba(239,68,68,0.3)'},blue:{bg:T.blueBg,fg:T.blue,bd:'rgba(59,130,246,0.3)'},purple:{bg:T.purpleBg,fg:T.purple,bd:'rgba(139,92,246,0.3)'}}[tone||'blue']; v={background:c.bg,color:c.fg,border:`1px solid ${c.bd}`} }
-  else if (variant==='purple-grad') v={background:'linear-gradient(135deg,#8b5cf6,#3b82f6)',color:'#fff',border:'1px solid rgba(255,255,255,0.08)'}
-  else if (variant==='purple-grad-loading') v={backgroundImage:'linear-gradient(110deg,#8b5cf6 0%,#3b82f6 25%,#6366f1 50%,#3b82f6 75%,#8b5cf6 100%)',backgroundSize:'200% 100%',animation:'shimmerBg 2s linear infinite',color:'#fff',border:'1px solid rgba(255,255,255,0.08)'}
+  
+  if (variant === 'primary') {
+    v = {background:'linear-gradient(135deg,#3b82f6,#8b5cf6)',color:'#fff',border:'1px solid rgba(255,255,255,0.08)'}
+  } else if (variant === 'primary-loading') {
+    v = {backgroundImage:'linear-gradient(110deg,#3b82f6 0%,#8b5cf6 25%,#6366f1 50%,#8b5cf6 75%,#3b82f6 100%)',backgroundSize:'200% 100%',animation:'shimmerBg 2s linear infinite',color:'#fff',border:'1px solid rgba(255,255,255,0.08)'}
+  } else if (variant === 'secondary') {
+    v = {background:'transparent',color:T.t2,border:`1px solid ${T.b2}`}
+  } else if (variant === 'tone') {
+    const toneMap: Record<string,{bg:string,fg:string,bd:string}> = {
+      green:{bg:T.greenBg,fg:T.green,bd:'rgba(34,197,94,0.3)'},
+      red:{bg:T.redBg,fg:T.red,bd:'rgba(239,68,68,0.3)'},
+      blue:{bg:T.blueBg,fg:T.blue,bd:'rgba(59,130,246,0.3)'},
+      purple:{bg:T.purpleBg,fg:T.purple,bd:'rgba(139,92,246,0.3)'},
+    }
+    const tc = toneMap[tone ?? 'blue'] ?? toneMap['blue']
+    v = {background:tc.bg,color:tc.fg,border:`1px solid ${tc.bd}`}
+  } else if (variant === 'purple-grad') {
+    v = {background:'linear-gradient(135deg,#8b5cf6,#3b82f6)',color:'#fff',border:'1px solid rgba(255,255,255,0.08)'}
+  } else if (variant === 'purple-grad-loading') {
+    v = {backgroundImage:'linear-gradient(110deg,#8b5cf6 0%,#3b82f6 25%,#6366f1 50%,#3b82f6 75%,#8b5cf6 100%)',backgroundSize:'200% 100%',animation:'shimmerBg 2s linear infinite',color:'#fff',border:'1px solid rgba(255,255,255,0.08)'}
+  }
+  
   return <button onClick={onClick} disabled={disabled} style={{...base,...v,...style}}>{children}</button>
 }
 
