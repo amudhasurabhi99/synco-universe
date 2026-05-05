@@ -1,5 +1,21 @@
 const NOTION_VERSION = '2022-06-28'
 
+export async function getChildPages(parentId: string): Promise<{id: string, title: string}[]> {
+  const res = await fetch(`https://api.notion.com/v1/blocks/${parentId}/children`, {
+    headers: {
+      'Authorization': `Bearer ${process.env.NOTION_API_KEY}`,
+      'Notion-Version': NOTION_VERSION
+    }
+  })
+  const data = await res.json()
+  if (!data.results) return []
+  const childPages = data.results.filter((b: any) => b.type === 'child_page')
+  return childPages.map((b: any) => ({
+    id: b.id.replace(/-/g, ''),
+    title: b.child_page?.title ?? 'Untitled'
+  }))
+}
+
 export async function getAllPages(): Promise<{id: string, title: string}[]> {
   const res = await fetch('https://api.notion.com/v1/search', {
     method: 'POST',
@@ -15,8 +31,7 @@ export async function getAllPages(): Promise<{id: string, title: string}[]> {
   return data.results.map((p: any) => {
     const titleArr = p.properties?.title?.title ?? p.title ?? []
     const title = titleArr.map((t: any) => t.plain_text).join('') || 'Untitled'
-    const id = p.id.replace(/-/g, '')
-    return { id, title }
+    return { id: p.id.replace(/-/g, ''), title }
   })
 }
 

@@ -1,8 +1,10 @@
 'use client'
 import { useState, useEffect } from 'react'
-import AlignmentDashboard from '@/components/AlignmentDashboard'
+import IntelligenceScan from '@/components/IntelligenceScan'
 import SwimLane from '@/components/SwimLane'
 import WeeklyReport from '@/components/WeeklyReport'
+
+const PARENT_PAGE_ID = process.env.NEXT_PUBLIC_NOTION_PARENT_PAGE_ID ?? ''
 
 export default function Home() {
   const [status, setStatus] = useState({ notion: false, slack: false, jira: false, claude: false })
@@ -51,11 +53,13 @@ export default function Home() {
 
       <div style={{ padding: 32 }}>
         <div style={{ background: '#0d1e35', border: '1px solid #1e3a5f', borderRadius: 12, padding: 24, marginBottom: 24 }}>
-          <div style={{ marginBottom: 16 }}>
-            <h2 style={{ color: '#60a5fa', fontSize: 14, fontWeight: 600, letterSpacing: 2, textTransform: 'uppercase', margin: '0 0 4px' }}>PRD Alignment Intelligence</h2>
-            <p style={{ color: '#475569', fontSize: 12, margin: 0 }}>Cross-checks Notion PRD vs Jira tickets vs GitHub codebase — auto-updates tickets with AI comments</p>
+          <div style={{ marginBottom: 20 }}>
+            <h2 style={{ color: '#60a5fa', fontSize: 14, fontWeight: 600, letterSpacing: 2, textTransform: 'uppercase', margin: '0 0 4px' }}>Intelligence Scan</h2>
+            <p style={{ color: '#475569', fontSize: 12, margin: 0 }}>
+              Scans all PRDs in your Notion folder · Reads entire GitHub codebase · Cross-checks Jira tickets · Auto-creates and updates tickets
+            </p>
           </div>
-          <AlignmentDashboard />
+          <IntelligenceScan parentPageId={PARENT_PAGE_ID} />
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
