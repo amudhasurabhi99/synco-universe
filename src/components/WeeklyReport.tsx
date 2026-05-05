@@ -62,7 +62,7 @@ export default function WeeklyReport() {
                 <span className="mono" style={{ fontSize:11, color:T.blue }}>{Math.round(completion)}%</span>
               </div>
               <div style={{ height:5, background:T.bg3, borderRadius:999, overflow:'hidden' }}>
-                <div style={{ width:`${completion}%`, height:'100%', background:`linear-gradient(90deg,${T.blue},${T.purple})`, borderRadius:999, transition:'width 300ms ease' }}/>
+                <div style={{ width:`${completion}%`, height:'100%', background:T.orange, borderRadius:999, transition:'width 300ms ease' }}/>
               </div>
             </div>
 
