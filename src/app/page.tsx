@@ -1,13 +1,12 @@
 'use client'
 import { useState, useEffect } from 'react'
-import PRDUploader from '@/components/PRDUploader'
+import AlignmentDashboard from '@/components/AlignmentDashboard'
 import SwimLane from '@/components/SwimLane'
 import WeeklyReport from '@/components/WeeklyReport'
 
 export default function Home() {
   const [status, setStatus] = useState({ notion: false, slack: false, jira: false, claude: false })
   const [seeded, setSeeded] = useState(false)
-  const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
 
   const fetchStatus = async () => {
     try { const res = await fetch('/api/orchestrate/status'); setStatus(await res.json()) } catch {}
@@ -33,15 +32,12 @@ export default function Home() {
   )
 
   return (
-    <main style={{ minHeight: '100vh', background: '#0A1628', fontFamily: 'Space Mono, monospace', padding: 0 }}>
-      {isDemoMode && (
-        <div style={{ background: '#7c3aed', padding: '8px 24px', textAlign: 'center' }}>
-          <span style={{ color: 'white', fontSize: 13 }}>Demo Mode — API calls return cached data</span>
-        </div>
-      )}
-
+    <main style={{ minHeight: '100vh', background: '#0A1628', fontFamily: 'Space Mono, monospace' }}>
       <div style={{ background: '#0d1e35', borderBottom: '1px solid #1e3a5f', padding: '16px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <h1 style={{ color: '#e2e8f0', fontSize: 20, fontWeight: 700, margin: 0, letterSpacing: 2 }}>SNYCO UNIVERSE</h1>
+        <div>
+          <h1 style={{ color: '#e2e8f0', fontSize: 20, fontWeight: 700, margin: 0, letterSpacing: 2 }}>SNYCO UNIVERSE</h1>
+          <p style={{ color: '#475569', fontSize: 11, margin: '2px 0 0' }}>Autonomous Project Intelligence Agent</p>
+        </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
           <Dot ok={status.notion} label="Notion" />
           <Dot ok={status.slack} label="Slack" />
@@ -53,20 +49,26 @@ export default function Home() {
         </div>
       </div>
 
-      <div style={{ padding: '32px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-        <div style={{ gridColumn: '1 / -1', background: '#0d1e35', border: '1px solid #1e3a5f', borderRadius: 12, padding: 24 }}>
-          <h2 style={{ color: '#60a5fa', fontSize: 14, fontWeight: 600, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 16, margin: '0 0 16px' }}>PRD Intake & Alignment</h2>
-          <PRDUploader />
+      <div style={{ padding: 32 }}>
+        <div style={{ background: '#0d1e35', border: '1px solid #1e3a5f', borderRadius: 12, padding: 24, marginBottom: 24 }}>
+          <div style={{ marginBottom: 16 }}>
+            <h2 style={{ color: '#60a5fa', fontSize: 14, fontWeight: 600, letterSpacing: 2, textTransform: 'uppercase', margin: '0 0 4px' }}>PRD Alignment Intelligence</h2>
+            <p style={{ color: '#475569', fontSize: 12, margin: 0 }}>Cross-checks Notion PRD vs Jira tickets vs GitHub codebase — auto-updates tickets with AI comments</p>
+          </div>
+          <AlignmentDashboard />
         </div>
 
-        <div style={{ background: '#0d1e35', border: '1px solid #1e3a5f', borderRadius: 12, padding: 24 }}>
-          <h2 style={{ color: '#60a5fa', fontSize: 14, fontWeight: 600, letterSpacing: 2, textTransform: 'uppercase', margin: '0 0 16px' }}>AI Swim Lane</h2>
-          <SwimLane />
-        </div>
-
-        <div style={{ background: '#0d1e35', border: '1px solid #1e3a5f', borderRadius: 12, padding: 24 }}>
-          <h2 style={{ color: '#60a5fa', fontSize: 14, fontWeight: 600, letterSpacing: 2, textTransform: 'uppercase', margin: '0 0 16px' }}>Weekly Report</h2>
-          <WeeklyReport />
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+          <div style={{ background: '#0d1e35', border: '1px solid #1e3a5f', borderRadius: 12, padding: 24 }}>
+            <h2 style={{ color: '#60a5fa', fontSize: 14, fontWeight: 600, letterSpacing: 2, textTransform: 'uppercase', margin: '0 0 4px' }}>AI Swim Lane</h2>
+            <p style={{ color: '#475569', fontSize: 12, margin: '0 0 16px' }}>Silent misalignment flags from GitHub PRs</p>
+            <SwimLane />
+          </div>
+          <div style={{ background: '#0d1e35', border: '1px solid #1e3a5f', borderRadius: 12, padding: 24 }}>
+            <h2 style={{ color: '#60a5fa', fontSize: 14, fontWeight: 600, letterSpacing: 2, textTransform: 'uppercase', margin: '0 0 4px' }}>Weekly Report</h2>
+            <p style={{ color: '#475569', fontSize: 12, margin: '0 0 16px' }}>AI-generated from live Jira + swim lane data</p>
+            <WeeklyReport />
+          </div>
         </div>
       </div>
     </main>
