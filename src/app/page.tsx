@@ -18,32 +18,43 @@ export default function Home() {
     try {
       const r = await fetch('/api/orchestrate/status')
       const d = await r.json()
-      setIntegrations([{name:'Notion',connected:d.notion},{name:'Slack',connected:d.slack},{name:'Jira',connected:d.jira},{name:'Claude',connected:d.claude}])
+      setIntegrations([
+        {name:'Notion',connected:d.notion},{name:'Slack',connected:d.slack},
+        {name:'Jira',connected:d.jira},{name:'Claude',connected:d.claude},
+      ])
     } catch {}
   }
+
   const fetchFlags = async () => {
-    try { const r = await fetch('/api/swimlane'); const f = await r.json(); setOpenFlags(f.filter((x:any)=>x.status==='open').length) } catch {}
+    try {
+      const r = await fetch('/api/swimlane')
+      const f = await r.json()
+      setOpenFlags(f.filter((x:any)=>x.status==='open').length)
+    } catch {}
   }
+
   const seed = async () => { await fetch('/api/seed'); fetchFlags() }
 
-  useEffect(() => {
+  useEffect(()=>{
     fetchStatus(); fetchFlags()
-    const s=setInterval(fetchStatus,30000), f=setInterval(fetchFlags,10000)
-    return ()=>{ clearInterval(s); clearInterval(f) }
-  }, [])
+    const s=setInterval(fetchStatus,30000)
+    const f=setInterval(fetchFlags,10000)
+    return()=>{ clearInterval(s); clearInterval(f) }
+  },[])
 
   return (
     <div style={{ background:T.bg0, minHeight:'100vh' }}>
       <Nav integrations={integrations} onSeed={seed}/>
       <Hero stats={[
-        {label:'Open Flags',value:`${openFlags} active`,color:openFlags>0?T.amber:T.green},
-        {label:'Jira Project',value:'KAN',color:T.blue},
-        {label:'Codebase',value:'synco-universe',color:T.purple},
+        {label:'Open Flags', value:`${openFlags} active`, color: openFlags>0 ? T.red : T.green},
+        {label:'Jira Project', value:'KAN', color:T.orange},
+        {label:'Codebase', value:'synco-universe', color:T.purple},
       ]}/>
-      <main style={{ padding:'24px 32px 48px', display:'flex', flexDirection:'column', gap:24, maxWidth:1480, margin:'0 auto' }}>
+      <main style={{ padding:'24px 32px 56px', display:'flex', flexDirection:'column', gap:20, maxWidth:1400, margin:'0 auto' }}>
         <IntelligenceScan/>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:24 }}>
-          <SwimLane/><WeeklyReport/>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:20 }}>
+          <SwimLane/>
+          <WeeklyReport/>
         </div>
       </main>
     </div>

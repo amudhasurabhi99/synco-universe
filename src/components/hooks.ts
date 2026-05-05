@@ -1,15 +1,15 @@
 'use client'
 import { useState, useEffect } from 'react'
-export function useCount(target: number, duration=800, run=true) {
+export function useCount(target: number, duration=700, run=true) {
   const [v, setV] = useState(0)
   useEffect(() => {
-    if (!run) return
+    if (!run) { setV(target); return }
     let raf: number, start: number
     const ease = (t: number) => 1 - Math.pow(1 - t, 3)
     const tick = (now: number) => {
       if (!start) start = now
       const p = Math.min(1, (now - start) / duration)
-      setV(target * ease(p))
+      setV(Math.round(target * ease(p)))
       if (p < 1) raf = requestAnimationFrame(tick)
     }
     raf = requestAnimationFrame(tick)
