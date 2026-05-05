@@ -47,7 +47,7 @@ export async function updateIssue(key: string, update: { status?: string, commen
 
 export async function getAllTickets(): Promise<any[]> {
   const res = await fetch(
-    `${process.env.JIRA_BASE_URL}/rest/api/3/search?jql=project=${process.env.JIRA_PROJECT_KEY}&maxResults=50&fields=summary,description,status,priority`,
+    `${process.env.JIRA_BASE_URL}/rest/api/3/search/jql?jql=project=${process.env.JIRA_PROJECT_KEY}&maxResults=50&fields=summary,description,status,priority`,
     { headers: { 'Authorization': `Basic ${auth()}` } }
   )
   const data = await res.json()
@@ -73,7 +73,7 @@ export async function getIssueByKey(key: string): Promise<{ summary: string, des
 
 export async function jiraSearch(): Promise<any[]> {
   const res = await fetch(
-    `${process.env.JIRA_BASE_URL}/rest/api/3/search?jql=project=${process.env.JIRA_PROJECT_KEY}&maxResults=100`,
+    `${process.env.JIRA_BASE_URL}/rest/api/3/search/jql?jql=project=${process.env.JIRA_PROJECT_KEY}&maxResults=100`,
     { headers: { 'Authorization': `Basic ${auth()}` } }
   )
   const data = await res.json()
