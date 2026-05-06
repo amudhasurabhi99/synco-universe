@@ -78,4 +78,4 @@ NEXT_PUBLIC_DEMO_MODE=false
 
 ## Built for
 
-Snyco Hackathon 2025 — Track 2: Autonomous Project Intelligence
+HackwithDC 2.0 Hackathon 2026 — Track 2: Autonomous Business Unit
