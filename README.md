@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Snyco Universe — Product Intelligence Agent
 
-## Getting Started
+> Catches the gap between what your PM wrote, what your team planned, and what your engineers actually built — before it becomes a problem.
 
-First, run the development server:
+## What it does
+
+Snyco Universe is an autonomous agent that connects Notion, GitHub, Jira, and Slack and keeps them honest with each other. One click triggers a full cross-system alignment check — no forms, no manual input, no chasing people.
+
+**In a single scan it:**
+- Reads every PRD in your Notion workspace
+- Scans your entire GitHub codebase
+- Fetches all Jira tickets (open, in-progress, done)
+- Scores alignment between all three using Claude AI
+- Auto-creates missing tickets in Jira
+- Flags misalignments in the swim lane dashboard
+- Posts a full report to Slack
+
+## The problem it solves
+
+Product teams waste 7+ hours per sprint manually bridging four tools that don't talk to each other. Snyco eliminates that entirely.
+
+| Task | Before | After |
+|------|--------|-------|
+| Writing tickets from PRD | 3 hrs | 0 — auto-created |
+| Alignment checking | 2 hrs | 0 — auto-scored |
+| Weekly status report | 2 hrs | 0 — auto-generated |
+| **Total per PM per sprint** | **7 hrs** | **~2 min** |
+
+## Architecture
+- **Next.js 14** API routes — pure orchestration, no external queue
+- **Claude AI** — semantic alignment scoring, ticket generation, report writing
+- **Self-correction Gate 1** — sub-90% alignment score halts ticket creation, alerts Slack
+- **Self-correction Gate 2** — sub-70% confidence flags are silently discarded
+
+## Tech stack
+
+- Next.js 14 + TypeScript + App Router
+- Tailwind CSS (inline styles design system)
+- Anthropic Claude API (claude-sonnet-4-5)
+- Notion API, Jira REST API, GitHub API, Slack Web API
+- Deployed on Vercel
+
+## Getting started
 
 ```bash
+git clone https://github.com/amudhasurabhi99/synco-universe.git
+cd synco-universe
+npm install
+cp .env.example .env.local  # fill in your keys
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+ANTHROPIC_API_KEY=
+NOTION_API_KEY=
+NOTION_CONTEXT_PAGE_IDS=
+NEXT_PUBLIC_NOTION_PARENT_PAGE_ID=
+SLACK_BOT_TOKEN=
+SLACK_PRODUCT_CHANNEL=
+SLACK_SWIMLANE_CHANNEL=
+JIRA_BASE_URL=
+JIRA_EMAIL=
+JIRA_API_TOKEN=
+JIRA_PROJECT_KEY=
+GITHUB_TOKEN=
+GITHUB_REPO=
+GITHUB_WEBHOOK_SECRET=
+NEXT_PUBLIC_DEMO_MODE=false
+```
 
-## Learn More
+## Live demo
 
-To learn more about Next.js, take a look at the following resources:
+[synco-universe.vercel.app](https://synco-universe.vercel.app)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Built for
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Snyco Hackathon 2025 — Track 2: Autonomous Project Intelligence

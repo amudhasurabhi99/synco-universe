@@ -81,8 +81,8 @@ export default function Home() {
       <div style={{ padding:'32px 32px 0', display:'flex', alignItems:'flex-end', justifyContent:'space-between', flexWrap:'wrap', gap:24 }}>
         <div>
           <p style={{ fontSize:11, fontWeight:500, letterSpacing:1, textTransform:'uppercase', color:T.t4, margin:'0 0 8px' }}>Intelligence Layer</p>
-          <h1 style={{ fontSize:30, fontWeight:600, color:T.t1, margin:0, letterSpacing:-0.5, lineHeight:1.2 }}>Project Alignment</h1>
-          <p style={{ fontSize:14, color:T.t3, margin:'6px 0 0' }}>Notion PRDs · GitHub · Jira — kept in sync automatically</p>
+          <h1 style={{ fontSize:30, fontWeight:600, color:T.t1, margin:0, letterSpacing:-0.5, lineHeight:1.2 }}>Product Intelligence Agent</h1>
+          <p style={{ fontSize:14, color:T.t3, margin:'6px 0 0' }}>Notion · GitHub · Jira · Slack — autonomous alignment, zero manual input</p>
         </div>
         <div style={{ display:'flex', gap:10, flexWrap:'wrap' }}>
           {[
